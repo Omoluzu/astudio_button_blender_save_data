@@ -1,12 +1,24 @@
+import os
 import bpy
 import requests
+from datetime import datetime
 
 log_messages = []
 
 
 def send_request():
+    file_path = os.path.join(
+        r"D:\Python\AlgousStudio\BlenderButton\SaveProject",
+        f"project_{datetime.now().strftime('%Y-%m-%d %H-%M-%S')}.blend"
+    )
+    bpy.ops.wm.save_as_mainfile(filepath=file_path)
+
     url = "http://example.com/api"
-    data = {"key": "value"}
+    data = {
+        "file_path": file_path,
+        "time": str(datetime.now()),
+        "author": None
+    }
     # response = requests.post(url, json=data)
     log_messages.append(url)
 
