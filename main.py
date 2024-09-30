@@ -3,8 +3,6 @@ import bpy
 import requests
 from datetime import datetime
 
-log_messages = []
-
 
 def send_request():
     file_path = os.path.join(
@@ -13,14 +11,17 @@ def send_request():
     )
     bpy.ops.wm.save_as_mainfile(filepath=file_path)
 
-    url = "http://example.com/api"
     data = {
-        "file_path": file_path,
-        "time": str(datetime.now()),
-        "author": None
+#        "time": str(datetime.now()),
+        "author": "Aleksey",
+        "time_save_project": "2024-09-30T12:00:00Z",
+        "path_save_project": file_path
     }
-    # response = requests.post(url, json=data)
-    log_messages.append(url)
+    response = requests.post(
+        "http://127.0.0.1:8000/api/blender/save_path/", 
+        json=data,
+        headers={"Content-Type": "application/json"}
+    )
 
 
 class SimpleOperator(bpy.types.Operator):
@@ -42,9 +43,6 @@ class SimplePanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         layout.operator(SimpleOperator.bl_idname)
-
-        for message in log_messages:
-            layout.label(text=message)
 
 
 def register():
