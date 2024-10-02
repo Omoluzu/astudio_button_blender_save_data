@@ -3,22 +3,45 @@ import bpy
 import requests
 from datetime import datetime
 
+USERNAME = "Aleksey Volkov"
+BASE_PATH_SAVE_PROJECT = r"D:\Python\AlgousStudio\BlenderButton\SaveProject"
+URL = "http://127.0.0.1:8000"
 
-def send_request():
-    file_path = os.path.join(
-        r"D:\Python\AlgousStudio\BlenderButton\SaveProject",
-        f"project_{datetime.now().strftime('%Y-%m-%d %H-%M-%S')}.blend"
+URL_POST_REQUEST_SAVE_DATA_PROJECT = "{}/api/blender/save_path/".format(URL)
+
+
+def get_path_project() -> str:
+    """
+    Get project path save
+    :return: path
+    """
+    blend_file_path = bpy.data.filepath
+    project_name = os.path.splitext(
+        os.path.basename(blend_file_path)
+    )[0].split('__')[0]
+
+    return os.path.join(
+        BASE_PATH_SAVE_PROJECT,
+        "{}__{}.blend".format(
+            project_name or 'project',
+            datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+        )
     )
-    bpy.ops.wm.save_as_mainfile(filepath=file_path)
 
+
+def send_request(file_path: str) -> None:
+    """
+    Submit a request to save project data
+    :param file_path: Path project save
+    """
     data = {
-#        "time": str(datetime.now()),
-        "author": "Aleksey",
-        "time_save_project": "2024-09-30T12:00:00Z",
+        "author": USERNAME,
+        "time_save_project": datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ'),
         "path_save_project": file_path
     }
-    response = requests.post(
-        "http://127.0.0.1:8000/api/blender/save_path/", 
+    
+    requests.post(
+        URL_POST_REQUEST_SAVE_DATA_PROJECT,
         json=data,
         headers={"Content-Type": "application/json"}
     )
@@ -29,7 +52,10 @@ class SimpleOperator(bpy.types.Operator):
     bl_label = "Отправить запрос"
 
     def execute(self, context):
-        send_request()
+        file_path = get_path_project()
+
+        bpy.ops.wm.save_as_mainfile(filepath=file_path)
+        send_request(file_path)
         return {'FINISHED'}
 
 
