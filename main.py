@@ -5,7 +5,7 @@ from datetime import datetime
 
 USERNAME = "Aleksey Volkov"
 BASE_PATH_SAVE_PROJECT = r"D:\Python\AlgousStudio\BlenderButton\SaveProject"
-URL = "http://127.0.0.1:8000"
+URL = "http://150024.msk.web.highserver.ru:8000"
 
 URL_POST_REQUEST_SAVE_DATA_PROJECT = "{}/api/blender/save_path/".format(URL)
 
