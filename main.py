@@ -49,7 +49,7 @@ def send_request(file_path: str) -> None:
 
 class SimpleOperator(bpy.types.Operator):
     bl_idname = "wm.send_request"
-    bl_label = "Отправить запрос"
+    bl_label = "Сохранить сцену"
 
     def execute(self, context):
         file_path = get_path_project()
@@ -60,7 +60,7 @@ class SimpleOperator(bpy.types.Operator):
 
 
 class SimplePanel(bpy.types.Panel):
-    bl_label = "Кнопка REST API"
+    bl_label = "Скрипты"
     bl_idname = "PT_RestApiButton"
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
